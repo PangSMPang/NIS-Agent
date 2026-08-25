@@ -1,6 +1,6 @@
 # NIS-Agent [EMNLP 2026]
 
-[![arXiv](https://img.shields.io/badge/arXiv-2608.23045-b31b1b.svg)](https://arxiv.org/abs/2608.23045)
+[![arXiv](https://img.shields.io/badge/arXiv-2608.23045-b31b1b.svg)](https://arxiv.org/abs/2608.23045) [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB.svg)](https://www.python.org/) [![License](https://img.shields.io/badge/License-Apache%202.0-D22128.svg)](./LICENSE)
 ## Framework
 ![NIS-Agent Framework](./assets/framework.png)
 ## Main Results
