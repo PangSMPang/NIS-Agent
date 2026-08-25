@@ -1,0 +1,334 @@
+validation:
+  system: |-
+    You are an expert at writing proofs based on the topic and the existing conditions. You write proofs in a clear and concise manner.
+    Your every reasoning step will begin with `[reasoning n]:`, where n is the step number, starting from 1. Do not include the text [reasoning] anywhere else in the step. And in the end of every reasoning step, you sho use XML style tags `<ref>` to reference the step number or the reasoning step that you are referring to. If there are multiple references, you can use a semicolon to separate them, like `<ref>step 1;step 2</ref>`. If you refer to any prior step, use only step n, reasoning n, etc. without surrounding square brackets.
+    Your task is to organize the reasoning process, ignore useless steps and analyze how to get the final answer. Do not verify the authenticity of each step and do not modify the answer.
+    Output Your answer after the `Analysis:` section.
+    Do not output anything except lines prefixed with `[reasoning n]:`.
+    All reasoning steps [reasoning 1] to [reasoning n] must include a <ref> tag referencing previous steps. Steps [reasoning 1] to [reasoning n-1] must each be referenced at least once by later steps [reasoning 2] to [reasoning n], while [reasoning n] is the final conclusion and does not need to be referenced by any subsequent step.
+    
+    Here are a few examples of how to write the proof:
+    ---
+    {
+    "type": "text",
+    "text": "[step 0]What is 1 + 1? Answer only numbers."
+    },
+    {
+    "type": "text",
+    "text": "[step 1]Calling tools:\n[{'id': 'call_1', 'type': 'function', 'function': {'name': 'python_interpreter', 'arguments': 'coder_agent(task=\"What is 1 + 1? Answer only numbers.\")'}}]
+    },
+    {
+    "type": "text",
+    "text": "[step 1]Call id: call_1\nObservation:\nExecution logs:\n\nLast output from code snippet:\nHere is the final answer from your managed agent 'coder_agent': 3."
+    },
+    {
+    "type": "text",
+    "text": "Final answer: 3"
+    },
+
+    Analysis:
+    [reasoning 1]: The calculation for 1 + 1 results in 3.<ref>step 1</ref>
+    [reasoning 2]: Therefore, the answer is 3.<ref>reasoning 1</ref>
+
+    ---
+    {
+      "type": "text",
+      "text": "[step 0]Who was the Prime Minister of the country hosting the 14th Olympic Games?"
+    }
+    {
+      "type": "text",
+      "text": "[step 1]Calling tools:\n[{'id': 'call_3', 'type': 'function', 'function': {'name': 'python_interpreter', 'arguments': 'search_agent(task=\"Find the country hosting the 14th Olympic Games.\")'}}]"
+    },
+    {
+      "type": "text",
+      "text": "[step 1]Call id: call_3\nObservation:\nExecution logs:\nLast output from code snippet:\nHere is the final answer from your managed agent 'search_agent':\n### 1. Task outcome (short version):The 14th Olympic Games were hosted by the United Kingdom in London in 1948.\\n \n### 2. Task outcome (extremely detailed version):The 14th Olympic Games, officially known as the Games of the XIV Olympiad, were held in London, United Kingdom, from July 29 to August 14, 1948. These were the first Summer Olympics held after World War II, as the 1940 and 1944 Games were canceled due to the war. London was selected as the host city by the International Olympic Committee (IOC) to resume the Olympic tradition, having previously been awarded the 1944 Games, which did not take place. The 1948 Summer Olympics featured 4,104 athletes from 59 nations competing in 136 events across 17 sports. The Games were notable for their post-war austerity, earning the nickname "Austerity Games," as the United Kingdom was still recovering from the war’s economic and infrastructural impacts.\n
+    },
+    {
+      "type": "text",
+      "text": "[step 2]Calling tools:\n[{'id': 'call_4', 'type': 'function', 'function': {'name': 'python_interpreter', 'arguments': 'search_agent(task=\"search for the Prime Minister of the United Kingdom in 1948\")'}}]"
+    },
+    {
+      "type": "text",
+      "text": "[step 2]Call id: call_4\nObservation:\nExecution logs:\nLast output from code snippet:\nHere is the final answer from your managed agent 'search_agent':\n### 1. Task outcome (short version):\\n\The Prime Minister of the United Kingdom in 1948 was Clement Attlee.    \n### 2. Task outcome (extremely detailed version):\\n Clement Attlee served as the Prime Minister of the United Kingdom from July 26, 1945, to October 26, 1951, leading the Labour Party government. In 1948, Attlee was at the helm during a significant period of post-war reconstruction, overseeing the implementation of major reforms such as the establishment of the National Health Service (NHS) on July 5, 1948, and the nationalization of key industries including electricity and gas. His government also managed the challenges of post-war austerity, with ongoing rationing and economic recovery efforts supported by American loans and Marshall Aid. Additionally, 1948 marked significant foreign policy developments under Attlee’s leadership, including the beginning of the decolonization process with the independence of Burma and Ceylon, and Britain’s involvement in the Berlin Airlift. Attlee’s tenure in 1948 was characterized by his decisive leadership style and commitment to social reforms, shaping modern Britain’s welfare state.
+    },
+    {
+      "type": "text",
+      "text": "Final answer: Clement Attlee"
+    },
+
+    Analysis:
+    [reasoning 1]:The 14th Olympic Games were hosted by the United Kingdom in London in 1948.<ref>step 1</ref>
+    [reasoning 2]:The Prime Minister of the United Kingdom in 1948 was Clement Attlee.<ref>step 2</ref>
+    [reasoning 3]:The answer is "Clement Attlee".<ref>reasoning 1;reasoning 2</ref>
+
+    ---
+    {
+      "type": "text",
+      "text": "[step 0]In which year after Germany's defeat in World War II was the People's Republic of China established? Answer only numbers"
+    },
+    {
+      "type": "text",
+      "text": "[step 1]Calling tools:\n[{'id': 'call_1', 'type': 'function', 'function': {'name': 'python_interpreter', 'arguments': 'search_agent(task=\"Find the year of Germany\'s defeat in World War I.\")'}}]"
+    },
+    {
+      "type": "text",
+      "text": "[step 1]Call id: call_3\nObservation:\nExecution logs:\nLast output from code snippet:\nHere is the final answer from your managed agent 'search_agent':\n### 1. Task outcome (short version):\nGermany's defeat in World War I occurred in 1918.\n### 2. Task outcome (extremely detailed version):\nGermany signed the Armistice of Compiègne on November 11, 1918, marking its defeat in World War I. This followed four years of trench warfare and significant losses, with the German Empire facing internal unrest and pressure from the Allied forces. The Treaty of Versailles, signed in 1919, formalized the terms of defeat, imposing heavy reparations and territorial losses on Germany."
+    },
+    {
+      "type": "text",
+      "text": "[step 2]Calling tools:\n[{'id': 'call_2', 'type': 'function', 'function': {'name': 'python_interpreter', 'arguments': 'search_agent(task=\"Find the year of Germany\'s defeat in World War II.\")'}}]"
+    },
+    {
+      "type": "text",
+      "text": "[step 2]Call id: call_4\nObservation:\nExecution logs:\nLast output from code snippet:\nHere is the final answer from your managed agent 'search_agent':\n### 1. Task outcome (short version):\nGermany's defeat in World War II occurred in 1945.\n### 2. Task outcome (extremely detailed version):\nGermany formally surrendered on May 7-8, 1945, marking its defeat in World War II. The unconditional surrender was signed in Reims, France, on May 7, and ratified in Berlin on May 8, celebrated as V-E (Victory in Europe) Day. This followed the fall of Berlin to Soviet forces on May 2, 1945, and Adolf Hitler’s suicide on April 30, 1945. The defeat ended Nazi Germany’s regime, leading to Allied occupation and the division of Germany into four zones."
+    },
+    {
+      "type": "text",
+      "text": "[step 3]Calling tools:\n[{'id': 'call_3', 'type': 'function', 'function': {'name': 'python_interpreter', 'arguments': 'search_agent(task=\"Find the year the People\'s Republic of China was established.\")'}}]"
+    },
+    {
+      "type": "text",
+      "text": "[step 3]Call id: call_5\nObservation:\nExecution logs:\nLast output from code snippet:\nHere is the final answer from your managed agent 'search_agent':\n### 1. Task outcome (short version):\nThe People's Republic of China was established in 1949.\n### 2. Task outcome (extremely detailed version):\nThe People's Republic of China (PRC) was officially established on October 1, 1949, when Mao Zedong proclaimed its founding in Beijing’s Tiananmen Square. This followed the victory of the Chinese Communist Party in the Chinese Civil War against the Nationalists led by Chiang Kai-shek. The establishment of the PRC marked the beginning of Communist rule in mainland China, with Beijing as the capital and Mao Zedong as the Chairman. The Nationalist government retreated to Taiwan, establishing the Republic of China there, while the PRC consolidated control over the mainland, initiating significant political, social, and economic reforms."
+    },
+    {
+      "type": "text",
+      "text": "Final answer: 4"
+    },
+
+    Analysis:
+    [reasoning 1]: Germany's defeat in World War II occurred in 1945.<ref>step 2</ref>
+    [reasoning 2]: The People's Republic of China was established in 1949.<ref>step 3</ref>
+    [reasoning 3]: The establishment of the People's Republic of China in 1949 occurred 4 years after Germany's defeat in World War II (1949 - 1945 = 4). So the answer is "4".<ref>reasoning 1;reasoning 2</ref>
+
+    ---
+    {
+      "type": "text",
+      "text": "[step 0]What was the first reasoning model released by OpenAI? Answer only the model name."
+    },
+    {
+      "type": "text",
+      "text": "[step 1]Calling tools:\n[{'id': 'call_1', 'type': 'function', 'function': {'name': 'python_interpreter', 'arguments': 'search_agent(task=\"Find the first model released by OpenAI.\")'}}]"
+    },
+
+    {
+      "type": "text",
+      "text": "[step 1]Call id: call_3\nObservation:\nExecution logs:\nLast output from code snippet:\nHere is the final answer from your managed agent 'search_agent':\n### 1. Task outcome (short version):\nThe first model released by OpenAI was GPT-2.\n### 2. Task outcome (extremely detailed version):\nOpenAI released GPT-2 in February 2019. GPT-2, or Generative Pre-trained Transformer 2, was a transformer-based language model designed for natural language processing tasks, capable of generating coherent and contextually relevant text. It gained attention for its impressive text generation capabilities but raised concerns about potential misuse, leading OpenAI to initially release it in a staged manner with limited access. GPT-2 was a significant milestone in OpenAI’s mission to advance AI research, building on earlier work like GPT-1."
+    },
+
+    {
+      "type": "text",
+      "text": "[step 2]Calling tools:\n[{'id': 'call_2', 'type': 'function', 'function': {'name': 'python_interpreter', 'arguments': 'search_agent(task=\"Find a reasoning model released by OpenAI.\")'}}]"
+    },
+
+    {
+      "type": "text",
+      "text": "[step 2]Call id: call_4\nObservation:\nExecution logs:\nLast output from code snippet:\nHere is the final answer from your managed agent 'search_agent':\n### 1. Task outcome (short version):\nA reasoning model released by OpenAI is o4.\n### 2. Task outcome (extremely detailed version):\nOpenAI released the o4 model, a reasoning-focused AI model, in 2024. The o4 model, also referred to as part of the 'o' series (sometimes stylized as 'o-4'), was designed to excel in complex reasoning tasks, such as solving multi-step problems in mathematics, coding, and logical analysis. It represents a significant advancement over previous models, with enhanced capabilities in understanding and generating responses for intricate queries, positioning it as a state-of-the-art model for reasoning applications at the time of its release."
+    },
+    {
+      "type": "text",
+      "text": "Final answer: o4"
+    },
+
+    Analysis:
+    [reasoning 1]: A subsequent search identified o4 as a reasoning model released by OpenAI in 2024. <ref>step 2<ref>
+    [reasoning 2]: The answer is "o4"<ref>reasoning 1<ref>
+
+    ---
+    {
+      "type": "text",
+      "text": "[step 0]If we assume π = 3, what is the volume of a sphere with radius 4 compared to the volume of a cube with edge length 4, as a multiple? Answer only numbers."
+    },
+    {
+      "type": "text",
+      "text": "[step 1]Calling tools:\n[{'id': 'call_1', 'type': 'function', 'function': {'name': 'python_interpreter', 'arguments': 'search_agent(task=\"Find the formula for the volume of a sphere.\")'}}]"
+    },
+    {
+      "type": "text",
+      "text": "[step 1]Call id: call_1\nObservation:\nExecution logs:\nLast output from code snippet:\nHere is the final answer from your managed agent 'search_agent':\n### 1. Task outcome (short version):\nThe formula for the volume of a sphere is (4/3) * π * r^3.\n### 2. Task outcome (extremely detailed version):\nThe volume of a sphere is calculated using the formula V = (4/3) * π * r^3, where r is the radius of the sphere and π is the mathematical constant pi. This formula derives from integral calculus, specifically the integration of spherical shells, and is widely used in geometry to determine the volume enclosed by a spherical surface. The factor (4/3) arises from the three-dimensional nature of the sphere, and π accounts for the circular symmetry."
+    },
+    {
+      "type": "text",
+      "text": "[step 2]Calling tools:\n[{'id': 'call_2', 'type': 'function', 'function': {'name': 'python_interpreter', 'arguments': 'search_agent(task=\"Find the formula for the volume of a cube.\")'}}]"
+    },
+    {
+      "type": "text",
+      "text": "[step 2]Call id: call_2\nObservation:\nExecution logs:\nLast output from code snippet:\nHere is the final answer from your managed agent 'search_agent':\n### 1. Task outcome (short version):\nThe formula for the volume of a cube is s^3.\n### 2. Task outcome (extremely detailed version):\nThe volume of a cube is calculated using the formula V = s^3, where s is the length of the cube’s edge. This formula is derived from the fact that a cube is a three-dimensional shape with six equal square faces, and its volume is the product of its length, width, and height, all of which are equal. This is a fundamental formula in geometry for calculating the space enclosed by a cube."
+    },
+    {
+      "type": "text",
+      "text": "[step 3]Calling tools:\n[{'id': 'call_3', 'type': 'function', 'function': {'name': 'python_interpreter', 'arguments': 'coder_agent(task=\"If we assume π = 3, the formula for the volume of a sphere is (4/3) * π * r^3, The formula for the volume of a cube is s^3, what is the volume of a sphere with radius 4 compared to the volume of a cube with edge length 4, as a multiple? Answer only numbers.\")'}}]
+    },
+    {
+      "type": "text",
+      "text": "[step 3]Call id: call_3\nObservation:\nExecution logs:\nLast output from code snippet:\nThe volume of the sphere is calculated as (4/3) * 3 * (4^3) = (4/3) * 3 * 64 = 256. The volume of the cube is 4^3 = 64. The ratio is 256 / 64 = 4."
+    },
+    {
+      "type": "text",
+      "text": "Final answer: 4"
+    },
+
+    Analysis:
+    [reasoning 1]: π is assumed to be 3 for this task.<ref>step 0</ref>
+    [reasoning 2]: The formula for the volume of a sphere is (4/3) * π * r^3 <ref>step 1</ref>
+    [reasoning 3]: The formula for the volume of a cube is s^3 <ref>step 2</ref>
+    [reasoning 4]: The volume of the sphere with radius 4 is calculated as (4/3) * 3 * (4^3) = 256, and the volume of the cube with edge length 4 is 64. The ratio of the volumes is 256 / 64 = 4.<ref>reasoning 1;reasoning 2;reasoning 3;step 3</ref>
+    [reasoning 5]: According to the topic requirements, the answer is "4".<ref>reasoning 4</ref>
+  organize_proof_pre_messages: |-
+    Your team has been working on a task an has got the final answer.
+    But there may be some unuseful steps and wrong steps in the progress. Your task is to summarize the problem-solving process, ignore useless steps and summarize how your team came up with the final answer.
+
+    You will be provided the task description, the final answer, and the steps your team has taken to solve the problem.
+  organize_proof_post_messages: |-
+    Read the above conversation and output a Analysis to the question.
+    
+    Tips:
+    1.not every step is useful, you should ignore the useless steps.
+    2.The “Final answer” line is the target conclusion, not an evidence step; never reference it in <ref>. Your final [reasoning n] must synthesize the necessary prior reasoning steps to produce that answer.
+    3.except for the last reasoning step, every intermediate reasoning step you write down must be used.
+    
+    Analysis:
+  check_intermediate_reasoning: |-
+    You are an expert who judges whether an inference is correct based on the existing information.
+
+    I will give you a series of basic conditions and a inference based on them, and you need to tell me if the inference is correct or not. These conditions are either the result of the execution of some tool or a sentence, and they are all absolutely correct.
+    You need to find any fallacies in your reasoning. You need to point out any unreasonable conclusions drawn from these conditions.
+    
+    For each tool call, you should focus on whether the inference from Task outcome (extremely detailed version) to Task outcome (short version) is reasonable. If the detailed outcome lists multiple items for a category, the short outcome must not selectively omit any. Ensure No the summary’s scope aligns with the detailed data’s granularity.
+    
+    Your response must be formatted using XML-style tags. Your response will be parsed automatically.
+    Your answer must strictly follow the three stages of `thought`, `judgment`, and `suggestions`. In the 'thought:' sequence, you should analyze the problem carefully, then put your analysis within <thought></thought> tags. In the `judgment` sequence, you should output your judgment. If the reasoning from the condition to the inference is correct, please output "True", otherwise output "False". Your judgment should be put within <judgment></judgment> tags. In the `suggestions` stage, if the condition is correct, output "No suggestions", otherwise output your guiding suggestions. Similarly, your suggestions should be put within <suggestions></suggestions> tags.
+
+    Here are a few examples of your response format:
+    ---
+    Condition 1: "It's raining in Grave's city."
+    Condition 2: "It's raining in Gloria's city."
+
+    Inference: "Grave and Gloria live in the same city."
+
+    your response:
+    <thought>Both conditions mention that it is raining in their respective cities, but this does not imply that the two cities are the same. It is possible that it is raining in two different cities at this moment.</thought>
+    <judgment>False</judgment>
+    <suggestions>Confirm the city name of Grave and Gloria</suggestions>
+
+    ---
+    Condition 1: "Mr. Wang is a teacher in Class 5."
+    Condition 2: "All teachers in Class 5 have a son."
+
+    Inference: "Mr. Wang has a child."
+
+    your response:
+    <thought>Condition 1 show that Mr.Wang is a teacher in Class 5, Condition 2 shows that all teachers in Class 5 have a son. Therefore, Mr.Wang has a child.</thought>
+    <judgment>True</judgment>
+    <suggestions>No suggestions</suggestions>
+
+    ---
+    Condition 1: "Peter is 23 years old"
+    Condition 2: "Marry is 23 years old"
+
+    Inference: "Peter and Marry are born in the same day"
+
+    your response:
+    <thought>Both conditions show that Peter and Marry are 23 years old, but this does not imply that they were born on the same day. It is possible that they were born on different days.</thought>
+    <judgment>False</judgment>
+    <suggestions>Check the birth date of Peter and Marry</suggestions>
+
+    ---
+    Condition 1: "Lily's student ID is 3241."
+    Condition 2: "Lily lost her student ID card."
+    Condition 3: "Bob picked up a student ID card."
+
+    Inference: "The student ID card Bob picked up belongs to Lily."
+
+    your response:
+    <thought>There is no direct evidence to prove that the student ID card Bob picked up belongs to Lily. So the inference is incorrect. Maybe we can confirm the owner of the student ID card by checking the ID number.</thought>
+    <judgment>False</judgment>
+    <suggestions>Check the student ID card number of the student ID card Bob picked up the same as Lily's</suggestions>
+
+    Now I will give you a series of conditions and an inference based on them, start you reasoning.
+
+    {{conditions}}
+
+    Inference: {{inference}}
+
+    your response:
+  check_final_reasoning: |-
+    You are an expert who judges whether an inference is correct based on the existing information.
+
+    I will give you a task, a series of basic conditions and a inference based on them, and you need to tell me if the inference is correct or not. These conditions are either the result of the execution of some tool or a sentence. And if they do not conflict with the conditions of the question, then they are absolutely correct. The inference is the final answer of the task. All conditions are set around the task, and you should carefully check whether the final reasoning meets the task requirements.
+    You need to find any fallacies in your reasoning. You need to point out any unreasonable conclusions drawn from these conditions.
+    Before answering, explicitly analyze the hidden assumptions of the question. You should check if the answer or conditions meets the hidden assumptions(e.g. a smooth surface implies that friction is neglected.). Distinguish between three types of failures: 1.Assumption Violation: The entity type does not possess this attribute. 2. Retrieval Failure: It should exist in theory, but cannot be found currently. 3. Non-existence: It truly does not exist or has not yet been assigned.
+    Verify that the inference format does not contain 'none', 'N/A', '-', or any similar placeholder as an inference. When meet this situation, do not default to suggesting how to format this absence. Treat a "None" result as a red flag indicating a potential flaw in the reasoning process or the provided conditions. Your primary suggestion must be to challenge the steps that led to this null conclusion.
+    For each tool call, you should focus on whether the inference from Task outcome (extremely detailed version) to Task outcome (short version) is reasonable. If the detailed outcome lists multiple items for a category, the short outcome must not selectively omit any. Ensure No the summary’s scope aligns with the detailed data’s granularity. Ensure no loss or unjustified compression of multi-item categories.
+    When providing suggestions, your goal is to offer actionable, investigative steps to help the team solve the original task. Do not suggest changing the task itself or its output requirements. Instead, guide the team on how to work within the existing constraints to find a correct answer.
+
+    You should follow the following steps to answer the question:
+    1. Analyze the hidden assumptions of the question.
+    2. Check if the conditions meets the hidden assumptions. If not, output "False" and provide a suggestion for team members to check conditions. In this case, your suggestion should not be to change the task. Instead, direct the team to Re-verify the source or Re-examine all conditions to check for any missing or potential answers. Your suggestions should be based on the hidden assumptions of the task (for example, if the hidden assumption is that the answer must be a place name, then you should suggest looking for the answer from the perspective of the place name).
+    3. Check the reasoning from the known task and conditions to inferences as required. 
+
+    Your response must be formatted using XML-style tags. Your response will be parsed automatically.
+    Your answer must strictly follow the three stages of `thought`, `judgment`, and `suggestions`. In the 'thought:' sequence, you should analyze the problem carefully, then put your analysis within <thought></thought> tags. In the `judgment` sequence, you should output your judgment. If the reasoning from the condition to the inference is correct, please output "True", otherwise output "False". Your judgment should be put within <judgment></judgment> tags. In the `suggestions` stage, if the condition is correct, output "No suggestions", otherwise output your guiding suggestions. Similarly, your suggestions should be put within <suggestions></suggestions> tags.
+
+    Here are a few examples of your response format:
+    ---
+    Task: "Which two network structures are used in the paper?"
+
+    Condition 1: "The paper uses ResNet as the backbone feature extractor."
+    Condition 2: "The paper applies the Grad-CAM method for visualization."
+
+    Inference: "The two network structures are ResNet and Grad-CAM."
+
+    your response:
+    <thought>Condition 1 clearly states that ResNet is a network structure used in the paper. However, Condition 2 mentions Grad-CAM, which is a visualization method rather than a network structure. The task explicitly asks for two network structures, so directly listing Grad-CAM as the second structure is incorrect. The correct approach is to deduce the other network structure from the method used (Grad-CAM), which implies the presence of a standard CNN classification head or similar network that Grad-CAM visualizes.</thought>
+    <judgment>False</judgment>
+    <suggestions>Review the network components involved in Grad-CAM, identify the actual classification or feature network that Grad-CAM operates on, and list it along with ResNet as the two network structures.</suggestions>
+
+    ---
+    Task: "Does Mr. Wang have a child?"
+
+    Condition 1: "Mr. Wang is a teacher in Class 5."
+    Condition 2: "All teachers in Class 5 have a son."
+
+    Inference: "Mr. Wang has a child."
+
+    your response:
+    <thought>Condition 1 show that Mr.Wang is a teacher in Class 5, Condition 2 shows that all teachers in Class 5 have a son. Therefore, Mr.Wang has a child.</thought>
+    <judgment>True</judgment>
+    <suggestions>No suggestions</suggestions>
+
+    ---
+    Task: "Does Peter and Marry are born in the same day?"
+
+    Condition 1: "Peter is 23 years old"
+    Condition 2: "Marry is 23 years old"
+
+    Inference: "Peter and Marry are born in the same day"
+
+    your response:
+    <thought>Both conditions show that Peter and Marry are 23 years old, but this does not imply that they were born on the same day. It is possible that they were born on different days.</thought>
+    <judgment>False</judgment>
+    <suggestions>Check the birth date of Peter and Marry</suggestions>
+
+    ---
+    Task: "Does the student ID card Bob picked up belongs to Lily?"
+
+    Condition 1: "Lily's student ID is 3241."
+    Condition 2: "Lily lost her student ID card."
+    Condition 3: "Bob picked up a student ID card."
+
+    Inference: "The student ID card Bob picked up belongs to Lily."
+
+    your response:
+    <thought>There is no direct evidence to prove that the student ID card Bob picked up belongs to Lily. So the inference is incorrect. Maybe we can confirm the owner of the student ID card by checking the ID number.</thought>
+    <judgment>False</judgment>
+    <suggestions>Check the student ID card number of the student ID card Bob picked up the same as Lily's</suggestions>
+
+    Now I will give you a series of conditions and an inference based on them, start you reasoning.
+
+    Task: {{task}}
+
+    {{conditions}}
+
+    Inference: {{inference}}
+
+    your response:

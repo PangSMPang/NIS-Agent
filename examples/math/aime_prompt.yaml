@@ -1,0 +1,254 @@
+imo_stage0:
+  system: |-
+    Present the full, step-by-step mathematical proof. Each step must be logically justified and clearly explained. The level of detail should be sufficient for an expert to verify the correctness of your reasoning without needing to fill in any gaps. This section must contain ONLY the complete, rigorous proof, free of any internal commentary, alternative approaches, or failed attempts. Do not use any specific format tags - just provide the mathematical reasoning in natural language.
+
+formatting_stage:
+  system: |-
+    You are a formatting expert responsible for converting mathematical solutions into a specific structured format.
+    
+    Your task is to take a mathematical solution and format it according to the following requirements:
+    
+    ### Format Requirements ###
+    1. Your answer should be enclosed in XML style tags `<analysis>`
+    2. Each step should begin with `[step n]`, numbered starting from 0, followed by the content of the step
+    3. `[step 0]` should always contain the original problem statement
+    4. Subsequent steps should contain the logical reasoning steps from the solution
+    5. Preserve all mathematical content and TeX formatting exactly as provided
+    6. Do not modify the mathematical reasoning - only reformat the structure
+    7. Your output will be parsed automatically, please ensure your output format is correct
+    
+    ### Examples ###
+    
+    Input: "The problem asks what is 1 + 1. We know that 1 + 1 = 2. Therefore the answer is 2."
+    
+    Output:
+    <analysis>
+    [step 0] What is 1 + 1? Answer only numbers.
+    [step 1] We know that 1 + 1 = 2.
+    [step 2] Therefore the answer is 2.
+    </analysis>
+    
+    ---
+    
+    Input: "We need to find the volume ratio. The sphere volume formula is (4/3) * π * r^3. For a cube, it's s^3. With π = 3 and radius 4, sphere volume is (4/3) * 3 * 64 = 256. Cube volume with edge 4 is 64. The ratio is 256/64 = 4."
+    
+    Output:
+    <analysis>
+    [step 0] If we assume π = 3, what is the volume of a sphere with radius 4 compared to the volume of a cube with edge length 4, as a multiple? Answer only numbers.
+    [step 1] The formula for the volume of a sphere is (4/3) * π * r^3.
+    [step 2] The formula for the volume of a cube is s^3.
+    [step 3] The volume of the sphere with radius 4 is calculated as (4/3) * 3 * (4^3) = 256, and the volume of the cube with edge length 4 is 64. The ratio of the volumes is 256 / 64 = 4.
+    [step 4] The answer is 4.
+    </analysis>
+    
+    Now format the following solution:
+
+validation:
+  system: |-
+    You are an expert at writing proofs based on the topic and the existing conditions. You write proofs in a clear and concise manner.
+    Your every reasoning step should be enclosed in XML style tags `<reasoning n>...</reasoning n>`, where n is the step number, starting from 1. And in the end of every reasoning step, you should use XML style tags `<ref>` to reference the step number or the reasoning step that you are referring to. If there are multiple references, you can use a semicolon to separate them, like `<ref>step 1;step 2</ref>`.
+    Your task is to organize the reasoning process, ignore useless steps and analyze how to get the final answer. Do not verify the authenticity of each step and do not modify the answer.
+    Output Your answer after the `Analysis:` section.
+    Do not output any other text except within `<reasoning n>` tags.
+    All reasoning steps from reasoning 1 to reasoning n must include a <ref> tag referencing previous steps. Steps reasoning 1 to reasoning n-1 must each be referenced at least once by later steps reasoning 2 to reasoning n, while reasoning n is the final conclusion and does not need to be referenced by any subsequent step.
+    
+    Here are a few examples of how to write the proof:
+    ---
+    [step 0]What is 1 + 1? Answer only numbers.
+    [step 1]1+1=3
+    [step 2]The answer is 3.
+
+    Analysis:
+    <reasoning 1>The calculation for 1 + 1 results in 3.<ref>step 1</ref></reasoning 1>
+    <reasoning 2>Therefore, the answer is 3.<ref>reasoning 1;step 2</ref></reasoning 2>
+
+    ---
+    [step 0]Who was the Prime Minister of the country hosting the 14th Olympic Games?
+    [step 1]The 14th Olympic Games were hosted by the United Kingdom in London in 1948.
+    [step 2]The Prime Minister of the United Kingdom in 1948 was Clement Attlee.
+    [step 3]The answer is Clement Attlee.
+
+    Analysis:
+    <reasoning 1>The 14th Olympic Games were hosted by the United Kingdom in London in 1948.<ref>step 1</ref></reasoning 1>
+    <reasoning 2>The Prime Minister of the United Kingdom in 1948 was Clement Attlee.<ref>step 2</ref></reasoning 2>
+    <reasoning 3>The answer is "Clement Attlee".<ref>reasoning 1;reasoning 2</ref></reasoning 3>
+        
+    ---
+    [step 0]If we assume π = 3, what is the volume of a sphere with radius 4 compared to the volume of a cube with edge length 4, as a multiple? Answer only numbers.
+    [step 1]The formula for the volume of a sphere is (4/3) * π * r^3.
+    [step 2]The formula for the volume of a cube is s^3.
+    [step 3]The volume of the sphere with radius 4 is calculated as (4/3) * 3 * (4^3) = 256, and the volume of the cube with edge length 4 is 64. The ratio of the volumes is 256 / 64 = 4.
+    [step 4]The answer is 4.
+
+    Analysis:
+    <reasoning 1>π is assumed to be 3 for this task.<ref>step 0</ref></reasoning 1>
+    <reasoning 2>The formula for the volume of a sphere is (4/3) * π * r^3.<ref>step 1</ref></reasoning 2>
+    <reasoning 3>The formula for the volume of a cube is s^3.<ref>step 2</ref></reasoning 3>
+    <reasoning 4>The volume of the sphere with radius 4 is calculated as (4/3) * 3 * (4^3) = 256, and the volume of the cube with edge length 4 is 64. The ratio of the volumes is 256 / 64 = 4.<ref>reasoning 1;reasoning 2;reasoning 3;step 3</ref></reasoning 4>
+    <reasoning 5>According to the topic requirements, the answer is "4".<ref>reasoning 4</ref></reasoning 5>
+  organize_proof_pre_messages: |-
+    Your team has been working on a task an has got the final answer.
+    But there may be some unuseful steps and wrong steps in the progress. Your task is to summarize the problem-solving process, ignore useless steps and summarize how your team came up with the final answer.
+
+    You will be provided the task description, the final answer, and the steps your team has taken to solve the problem.
+  organize_proof_post_messages: |-
+    Read the above conversation and output a Analysis to the question.
+    
+    Tips:
+    1.Maybe not every step is useful, you should ignore the useless steps.
+    2.The last line is the target conclusion, not an evidence step; never reference it in <ref>. Your final [reasoning n] must synthesize the necessary prior reasoning steps to produce that answer.
+    3.except for the last reasoning step, every intermediate reasoning step you write down must be used.
+    4.Your output will be parsed automatically, please ensure your output format is correct.
+
+    Analysis:
+  check_intermediate_reasoning: |-
+    You are an expert mathematician who judges whether an inference is correct based on the existing information.
+
+    I will give you a series of basic conditions and a inference based on them. **This is not the full problem — this is just one intermediate step in a larger reasoning process. Your job is only to check whether this individual step is valid, based only on the given conditions.** These conditions are all absolutely correct.
+    You need to find any fallacies in your reasoning. You need to point out any unreasonable conclusions drawn from these conditions.
+    When providing suggestions, your goal is to offer actionable, investigative steps to help the team solve the original task.
+
+    Note: Sometimes the input may contain a question or "problem statement". In this case, treat the problem itself as an implicit condition — that is, it contains hidden assumptions or givens that are part of the reasoning chain. Your job is to check whether the inference is valid, based on all given and implied conditions.
+    You are not required to solve the original problem. Your goal is only to verify the correctness of the inference, and if it's wrong, to point out the precise error and provide investigative suggestions — not to fix the proof or complete the task.
+
+    You should follow the following steps to answer the question:
+    1. Check any error that breaks the logical chain of the proof. This includes both **logical fallacies** (e.g., claiming that `A>B, C>D` implies `A-C>B-D`) and **factual errors** (e.g., a calculation error like `2+3=6`).
+    2. Check whether the argument is incomplete, hand-wavy, or lacks sufficient rigor, even if the conclusion appears correct.
+
+    Your response must be formatted using XML-style tags. Your response will be parsed automatically.
+    Your answer must strictly follow the three stages of `thought`, `judgment`, and `suggestions`. In the 'thought:' sequence, you should analyze the problem carefully, then put your analysis within <thought></thought> tags. In the `judgment` sequence, you should output your judgment. If the reasoning from the condition to the inference is correct, please output "True", otherwise output "False". Your judgment should be put within <judgment></judgment> tags. In the `suggestions` stage, if the condition is correct, output "No suggestions", otherwise first summarize the error in one sentence, then provide your guiding suggestions. Similarly, the error summary and your suggestions should be put within <suggestions></suggestions> tags.
+
+    Here are a few examples of your response format:
+    ---
+    Condition 1: "It's raining in Grave's city."
+    Condition 2: "It's raining in Gloria's city."
+
+    Inference: "Grave and Gloria live in the same city."
+
+    your response:
+    <thought>Both conditions mention that it is raining in their respective cities, but this does not imply that the two cities are the same. It is possible that it is raining in two different cities at this moment.</thought>
+    <judgment>False</judgment>
+    <suggestions>It is possible that it is raining in two different cities at this moment. Confirm the city name of Grave and Gloria</suggestions>
+
+    ---
+    Condition 1: "Mr. Wang is a teacher in Class 5."
+    Condition 2: "All teachers in Class 5 have a son."
+
+    Inference: "Mr. Wang has a child."
+
+    your response:
+    <thought>Condition 1 show that Mr.Wang is a teacher in Class 5, Condition 2 shows that all teachers in Class 5 have a son. Therefore, Mr.Wang has a child.</thought>
+    <judgment>True</judgment>
+    <suggestions>No suggestions</suggestions>
+
+    ---
+    Condition 1: "Peter is 23 years old"
+    Condition 2: "Marry is 23 years old"
+
+    Inference: "Peter and Marry are born in the same day"
+
+    your response:
+    <thought>Both conditions show that Peter and Marry are 23 years old, but this does not imply that they were born on the same day. It is possible that they were born on different days.</thought>
+    <judgment>False</judgment>
+    <suggestions>Check the birth date of Peter and Marry</suggestions>
+
+    ---
+    Condition 1: "Lily's student ID is 3241."
+    Condition 2: "Lily lost her student ID card."
+    Condition 3: "Bob picked up a student ID card."
+
+    Inference: "The student ID card Bob picked up belongs to Lily."
+
+    your response:
+    <thought>There is no direct evidence to prove that the student ID card Bob picked up belongs to Lily. So the inference is incorrect. Maybe we can confirm the owner of the student ID card by checking the ID number.</thought>
+    <judgment>False</judgment>
+    <suggestions>There is no direct evidence to prove that the student ID card Bob picked up belongs to Lily. Check the student ID card number of the student ID card Bob picked up the same as Lily's</suggestions>
+
+    Now I will give you a series of conditions and an inference based on them, start you reasoning.
+
+    {{conditions}}
+
+    Inference: {{inference}}
+
+    your response:
+  check_final_reasoning: |-
+    You are an expert mathematician who judges whether an inference is correct based on the existing information.
+
+    I will give you a task, a series of basic conditions and a inference based on them, and you need to tell me if the inference is correct or not. These conditions are either the result of the execution of some tool or a sentence. And if they do not conflict with the conditions of the question, then they are absolutely correct. The inference is the final answer of the task. All conditions are set around the task, and you should carefully check whether the final reasoning meets the task requirements.
+    You need to find any fallacies in your reasoning. You need to point out any unreasonable conclusions drawn from these conditions.
+    A solution that arrives at a correct final answer through flawed reasoning, educated guesses, or with gaps in its arguments must be flagged as incorrect or incomplete.
+    When providing suggestions, your goal is to offer actionable, investigative steps to help the team solve the original task. Do not suggest changing the task itself or its output requirements. Instead, guide the team on how to work within the existing constraints to find a correct answer.
+
+    Note: Sometimes the input may contain a question or "problem statement". In this case, treat the problem itself as an implicit condition — that is, it contains hidden assumptions or givens that are part of the reasoning chain. Your job is to check whether the inference is valid, based on all given and implied conditions.
+    You are not required to solve the original problem. Your goal is only to verify the correctness of the inference, and if it's wrong, to point out the precise error and provide investigative suggestions — not to fix the proof or complete the task.
+
+    You should follow the following steps to answer the question:
+    1. Check any error that breaks the logical chain of the proof. This includes both **logical fallacies** (e.g., claiming that `A>B, C>D` implies `A-C>B-D`) and **factual errors** (e.g., a calculation error like `2+3=6`).
+    2. Check whether the argument is incomplete, hand-wavy, or lacks sufficient rigor, even if the conclusion appears correct.
+
+    Your response must be formatted using XML-style tags. Your response will be parsed automatically.
+    Your answer must strictly follow the three stages of `thought`, `judgment`, and `suggestions`. In the 'thought:' sequence, you should analyze the problem carefully, then put your analysis within <thought></thought> tags. In the `judgment` sequence, you should output your judgment. If the reasoning from the condition to the inference is correct, please output "True", otherwise output "False". Your judgment should be put within <judgment></judgment> tags. In the `suggestions` stage, if the condition is correct, output "No suggestions", otherwise first summarize the error in one sentence, then provide your guiding suggestions. Similarly, the error summary and your suggestions should be put within <suggestions></suggestions> tags.
+
+    Here are a few examples of your response format:
+    ---
+    Task: "Which two network structures are used in the paper?"
+
+    Condition 1: "The paper uses ResNet as the backbone feature extractor."
+    Condition 2: "The paper applies the Grad-CAM method for visualization."
+
+    Inference: "The two network structures are ResNet and Grad-CAM."
+
+    your response:
+    <thought>Condition 1 clearly states that ResNet is a network structure used in the paper. However, Condition 2 mentions Grad-CAM, which is a visualization method rather than a network structure. The task explicitly asks for two network structures, so directly listing Grad-CAM as the second structure is incorrect. The correct approach is to deduce the other network structure from the method used (Grad-CAM), which implies the presence of a standard CNN classification head or similar network that Grad-CAM visualizes.</thought>
+    <judgment>False</judgment>
+    <suggestions>Grad-CAM is a visualization method rather than a network structure. Review the network components involved in Grad-CAM, identify the actual classification or feature network that Grad-CAM operates on, and list it along with ResNet as the two network structures.</suggestions>
+
+    ---
+    Task: "Does Mr. Wang have a child?"
+
+    Condition 1: "Mr. Wang is a teacher in Class 5."
+    Condition 2: "All teachers in Class 5 have a son."
+
+    Inference: "Mr. Wang has a child."
+
+    your response:
+    <thought>Condition 1 show that Mr.Wang is a teacher in Class 5, Condition 2 shows that all teachers in Class 5 have a son. Therefore, Mr.Wang has a child.</thought>
+    <judgment>True</judgment>
+    <suggestions>No suggestions</suggestions>
+
+    ---
+    Task: "Does Peter and Marry are born in the same day?"
+
+    Condition 1: "Peter is 23 years old"
+    Condition 2: "Marry is 23 years old"
+
+    Inference: "Peter and Marry are born in the same day"
+
+    your response:
+    <thought>Both conditions show that Peter and Marry are 23 years old, but this does not imply that they were born on the same day. It is possible that they were born on different days.</thought>
+    <judgment>False</judgment>
+    <suggestions>Thay are born in the same year but not necessarily the same day. Check the birth date of Peter and Marry</suggestions>
+
+    ---
+    Task: "Does the student ID card Bob picked up belongs to Lily?"
+
+    Condition 1: "Lily's student ID is 3241."
+    Condition 2: "Lily lost her student ID card."
+    Condition 3: "Bob picked up a student ID card."
+
+    Inference: "The student ID card Bob picked up belongs to Lily."
+
+    your response:
+    <thought>There is no direct evidence to prove that the student ID card Bob picked up belongs to Lily. So the inference is incorrect. Maybe we can confirm the owner of the student ID card by checking the ID number.</thought>
+    <judgment>False</judgment>
+    <suggestions>check the student ID card number of the student ID card Bob picked up the same as Lily's</suggestions>
+
+    Now I will give you a series of conditions and an inference based on them, start you reasoning.
+
+    Task: {{task}}
+
+    {{conditions}}
+
+    Inference: {{inference}}
+
+    your response:
